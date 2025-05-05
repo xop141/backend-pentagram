@@ -21,7 +21,23 @@ const app = express();
 const port = process.env.PORT || 9000;
 
 app.use(express.json());
-app.use(cors({ origin: "https://pentagram-i97c.onrender.com" }));
+const allowedOrigins = [
+  'https://pentagram-i97c.onrender.com',
+  'http://localhost:3000',
+  'https://frontend-pentagram-real-h9mdjc2am-xop141s-projects.vercel.app'
+
+]
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 
 const server = http.createServer(app);
 
@@ -43,13 +59,20 @@ app.use("/api", LikeRouter);
 app.use("/api", CommentRouter);
 app.use("/api", ConvertRouter);
 
-// Socket.IO
+
+
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS (Socket.IO)'));
+      }
+    },
     methods: ["GET", "POST"],
     credentials: true,
-  },
+  }
 });
 
 type RoomUsers = { [roomId: string]: string[] };

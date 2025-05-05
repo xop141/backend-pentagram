@@ -21,7 +21,7 @@ const app = express();
 const port = process.env.PORT || 9000;
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "https://pentagram-i97c.onrender.com" }));
 
 const server = http.createServer(app);
 
@@ -46,7 +46,7 @@ app.use("/api", ConvertRouter);
 // Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://pentagram-i97c.onrender.com",
     methods: ["GET", "POST"],
     credentials: true,
   },

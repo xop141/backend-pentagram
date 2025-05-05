@@ -27,7 +27,8 @@ app.use(express.json());
 const allowedOrigins = [
   'https://pentagram-i97c.onrender.com',
   'http://localhost:3000',
-  'https://frontend-pentagram-real-h9mdjc2am-xop141s-projects.vercel.app'
+  'https://frontend-pentagram-real-h9mdjc2am-xop141s-projects.vercel.app',
+  'https://frontend-pentagram-real-bzjamttra-xop141s-projects.vercel.app/'
 ];
 
 // CORS for REST API

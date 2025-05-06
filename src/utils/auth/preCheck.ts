@@ -35,6 +35,7 @@ const preCheck = async (req: Request, res: Response) => {
       fullname,
       code
     }));
+console.log(memoryStore);
 
     res.json({ message: "Verification code sent to email" });
   } catch (error) {

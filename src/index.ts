@@ -64,7 +64,7 @@ app.use("/api/notifications", notificationRoutes);
 // Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "https://newwinstagram.vercel.app"],
+    origin: ["http://localhost:3000", "https://newwinstagram.vercel.app","https://pentagram-i97c.onrender.com"],
     methods: ["GET", "POST"],
     credentials: true,
   },

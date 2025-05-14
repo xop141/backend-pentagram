@@ -30,7 +30,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://pentagram-i97c.onrender.com"],
+    origin: ["http://localhost:3000", "https://newwinstagram.vercel.app",'https://pentagram-i97c.onrender.com'],
   })
 );
 
@@ -64,7 +64,7 @@ app.use("/api/notifications", notificationRoutes);
 // Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "https://pentagram-i97c.onrender.com"],
+    origin: ["http://localhost:3000", "https://newwinstagram.vercel.app"],
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -154,131 +154,7 @@ io.on("connection", (socket) => {
       }
     }
   });
-
-  socket.on("join-user", (userId) => {
-    socket.join(userId);
-    console.log(`User ${userId} joined personal room`);
-  });
-
-  socket.on("addUser", (userId) => {
-    users.set(userId, socket.id); // холбоод хадгална
-  });
-
-  socket.on("sendNotification", async ({ senderId, receiverId, type }) => {
-    try {
-      const senderUser = await User.findById(senderId);
-      if (!senderUser) return console.error("Sender user not found");
-
-      const username = senderUser.username;
-      const receiverSocketId = users.get(receiverId);
-
-      // -------------------- FOLLOW --------------------
-      if (type === "follow") {
-        const newNotification = new Notification({
-          senderId,
-          receiverId,
-          type,
-          message: `${username} followed you.`,
-        });
-
-        await newNotification.save();
-
-        if (receiverSocketId) {
-          io.to(receiverSocketId).emit("getNotification", {
-            senderId,
-            username,
-            type,
-          });
-        }
-      }
-
-      // -------------------- UNFOLLOW --------------------
-      if (type === "unfollow") {
-        await Notification.deleteMany({
-          senderId,
-          receiverId,
-          type: "follow",
-        });
-
-        if (receiverSocketId) {
-          io.to(receiverSocketId).emit("deleteNotification", {
-            senderId,
-            type: "follow",
-          });
-        }
-      }
-
-      // -------------------- LIKE --------------------
-      if (type === "like") {
-        const newNotification = new Notification({
-          senderId,
-          receiverId,
-          type,
-          message: `${username} liked your post.`,
-        });
-
-        await newNotification.save();
-
-        if (receiverSocketId) {
-          io.to(receiverSocketId).emit("getNotification", {
-            senderId,
-            username,
-            type,
-            message: newNotification.message,
-          });
-        }
-      }
-
-      // -------------------- UNLIKE --------------------
-      if (type === "unlike") {
-        await Notification.deleteMany({
-          senderId,
-          receiverId,
-          type: "like",
-        });
-
-        if (receiverSocketId) {
-          io.to(receiverSocketId).emit("deleteNotification", {
-            senderId,
-            type: "like",
-          });
-        }
-      }
-
-      // -------------------- COMMENT --------------------
-      if (type === "comment") {
-        const newNotification = new Notification({
-          senderId,
-          receiverId,
-          type,
-          message: `${username} commented on your post.`,
-        });
-
-        await newNotification.save();
-
-        if (receiverSocketId) {
-          io.to(receiverSocketId).emit("getNotification", {
-            senderId,
-            username,
-            type,
-          });
-        }
-      }
-    } catch (error) {
-      console.error("❌ Notification хадгалахад эсвэл устгахад алдаа:", error);
-    }
-  });
-  socket.on("disconnect", () => {
-    for (const [userId, socketId] of users.entries()) {
-      if (socketId === socket.id) {
-        users.delete(userId);
-        console.log("🔴 Хэрэглэгч салсан:", userId);
-        break;
-      }
-    }
-  });
 });
-
 server.listen(port, () => {
   console.log(`Server and Socket.IO listening on http://localhost:${port}`);
 });

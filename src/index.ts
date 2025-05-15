@@ -2,29 +2,18 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
-// import authRouter from "../src/routers/authRoute";
-// import PostRouter from "./routers/PostRouter";
-// import userRouter from "../src/routers/userRouter";
-// import storyRouter from "./routers/StoryRouter";
-// import Followrouter from "./routers/FollowRouter";
-// import LikeRouter from "./routers/LikeRouter";
-// import CommentRouter from "./routers/CommentRouter";
-// import ConvertRouter from "./routers/ConvertRouter";
-// import SuggestRouter from "./routers/SuggestedRouter";
-// import chatRoute from "./routers/chatRoute";
+
 import Message from "./models/messageModel";
 import roomModel from "./models/roomModel";
 import http from "http";
 import { Server } from "socket.io";
 import checkMsg from "./utils/auth/checkMsg";
-// import savedRouter from "./routers/SaveRouter";
-// import Notification from "./models/notification";
 import { User } from "./models/userModel";
-// import notificationRoutes from "./routers/notification";
+import notificationRoutes from "./routers/notification";
 
 dotenv.config();
 const app = express();
-const port = 9000;
+const port = process.env.PORT || 9000;
 
 app.use(express.json());
 
@@ -46,21 +35,6 @@ if (!mongoConnectionString) {
 mongoose.connect(mongoConnectionString).then(() => {
   console.log("Database connected");
 });
-
-// Routers
-// app.use("/api/auth", authRouter);
-// app.use("/api", PostRouter);
-// app.use("/api/users", userRouter);
-// app.use("/api", Followrouter);
-// app.use("/api", LikeRouter);
-// app.use("/api", CommentRouter);
-// app.use("/api", ConvertRouter);
-// app.use("/api", storyRouter);
-// app.use("/api", savedRouter);
-// app.use("/api", SuggestRouter);
-// app.use("/api/chat", chatRoute);
-// app.use("/api/notifications", notificationRoutes);
-
 // Socket.IO
 const io = new Server(server, {
   cors: {
@@ -167,131 +141,14 @@ io.on("connection", (socket) => {
     }
   });
 
-//   socket.on("join-user", (userId) => {
-//     socket.join(userId);
-//     console.log(`User ${userId} joined personal room`);
-//   });
+ 
 
-//   socket.on("addUser", (userId) => {
-//     users.set(userId, socket.id); // холбоод хадгална
-//   });
+  
 
-//   socket.on("sendNotification", async ({ senderId, receiverId, type }) => {
-//     try {
-//       const senderUser = await User.findById(senderId);
-//       if (!senderUser) return console.error("Sender user not found");
+ 
 
-//       const username = senderUser.username;
-//       const receiverSocketId = users.get(receiverId);
-
-//       // -------------------- FOLLOW --------------------
-//       if (type === "follow") {
-//         const newNotification = new Notification({
-//           senderId,
-//           receiverId,
-//           type,
-//           message: `${username} followed you.`,
-//         });
-
-//         await newNotification.save();
-
-//         if (receiverSocketId) {
-//           io.to(receiverSocketId).emit("getNotification", {
-//             senderId,
-//             username,
-//             type,
-//           });
-//         }
-//       }
-
-//       // -------------------- UNFOLLOW --------------------
-//       if (type === "unfollow") {
-//         await Notification.deleteMany({
-//           senderId,
-//           receiverId,
-//           type: "follow",
-//         });
-
-//         if (receiverSocketId) {
-//           io.to(receiverSocketId).emit("deleteNotification", {
-//             senderId,
-//             type: "follow",
-//           });
-//         }
-//       }
-
-//       // -------------------- LIKE --------------------
-//       if (type === "like") {
-//         const newNotification = new Notification({
-//           senderId,
-//           receiverId,
-//           type,
-//           message: `${username} liked your post.`,
-//         });
-
-//         await newNotification.save();
-
-//         if (receiverSocketId) {
-//           io.to(receiverSocketId).emit("getNotification", {
-//             senderId,
-//             username,
-//             type,
-//             message: newNotification.message,
-//           });
-//         }
-//       }
-
-//       // -------------------- UNLIKE --------------------
-//       if (type === "unlike") {
-//         await Notification.deleteMany({
-//           senderId,
-//           receiverId,
-//           type: "like",
-//         });
-
-//         if (receiverSocketId) {
-//           io.to(receiverSocketId).emit("deleteNotification", {
-//             senderId,
-//             type: "like",
-//           });
-//         }
-//       }
-
-//       // -------------------- COMMENT --------------------
-//       if (type === "comment") {
-//         const newNotification = new Notification({
-//           senderId,
-//           receiverId,
-//           type,
-//           message: `${username} commented on your post.`,
-//         });
-
-//         await newNotification.save();
-
-//         if (receiverSocketId) {
-//           io.to(receiverSocketId).emit("getNotification", {
-//             senderId,
-//             username,
-//             type,
-//           });
-//         }
-//       }
-//     } catch (error) {
-//       console.error("❌ Notification хадгалахад эсвэл устгахад алдаа:", error);
-//     }
-//   });
-//   socket.on("disconnect", () => {
-//     for (const [userId, socketId] of users.entries()) {
-//       if (socketId === socket.id) {
-//         users.delete(userId);
-//         console.log("🔴 Хэрэглэгч салсан:", userId);
-//         break;
-//       }
-//     }
-//   });
-// });
+});
 
 server.listen(port, () => {
   console.log(`Server and Socket.IO listening on http://localhost:${port}`);
-})
-})
+});

@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const CreatePost_1 = __importDefault(require("../controller/POST/CreatePost"));
+const Updatepost_1 = __importDefault(require("../controller/POST/Updatepost"));
+const DeletePost_1 = require("../controller/POST/DeletePost");
+const GetPost_1 = require("../controller/POST/GetPost");
+const EditPost_1 = __importDefault(require("../controller/POST/EditPost"));
+const GetPost_2 = require("../controller/POST/GetPost");
+const GetPostUserId_1 = require("../controller/POST/GetPostUserId");
+const router = express_1.default.Router();
+router.post("/CreatePost", CreatePost_1.default);
+router.post("/posts/:postId", Updatepost_1.default);
+router.put("/UpdatePost", Updatepost_1.default);
+router.put("/:postId", EditPost_1.default);
+router.get("/posts/user/:username", GetPost_1.getPostsByUser);
+router.get("/post/:id", GetPost_2.getPostById);
+router.delete("/Delete/:postId", DeletePost_1.deletePost);
+router.get("/getPostsUserId/:userId", GetPostUserId_1.getPostsUserId);
+router.delete("/Delete/:postId", DeletePost_1.deletePost);
+exports.default = router;

@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const GetUser_1 = require("../controller/User/GetUser");
+const UpdateUser_1 = require("../controller/User/UpdateUser");
+const GetFollowingPost_1 = require("../controller/POST/GetFollowingPost");
+const get_userByUsername_1 = __importDefault(require("../controller/user-profile/get-userByUsername"));
+const SearchUser_1 = require("../controller/SearchUser/SearchUser");
+const Conver_1 = require("../controller/UserIdToUsername/Conver");
+const userRouter = express_1.default.Router();
+userRouter.get("/search", SearchUser_1.searchUser);
+userRouter.get("/:id", GetUser_1.getUsers);
+userRouter.get("/", GetUser_1.getUsers);
+userRouter.put("/update/:id", UpdateUser_1.updateUser);
+userRouter.get("/username/:username", get_userByUsername_1.default);
+userRouter.get("/feed/:id", GetFollowingPost_1.getFeedPosts);
+userRouter.get("/ConvertUsername/:userId", Conver_1.convertUserIdToUsername);
+exports.default = userRouter;

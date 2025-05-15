@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const preCheck_1 = __importDefault(require("../utils/auth/preCheck"));
+const login_account_1 = __importDefault(require("../utils/auth/login-account"));
+const create_account_1 = __importDefault(require("../utils/auth/create-account"));
+const searchMsg_1 = __importDefault(require("../utils/msg/searchMsg"));
+const createRoom_1 = __importDefault(require("../utils/msg/createRoom"));
+const allChats_1 = __importDefault(require("../utils/msg/allChats"));
+const changePre_1 = __importDefault(require("../utils/auth/changePre"));
+const router = express_1.default.Router();
+router.post('/register', preCheck_1.default);
+router.post('/login', login_account_1.default);
+router.post('/create-account', create_account_1.default);
+router.get('/messages/:name', searchMsg_1.default);
+router.post('/Room', createRoom_1.default);
+router.get('/chats/:id', allChats_1.default);
+router.delete('/editPre/:id', changePre_1.default);
+exports.default = router;

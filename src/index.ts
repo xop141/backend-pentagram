@@ -82,7 +82,7 @@ io.on("connection", (socket) => {
 
     io.to(roomId).emit("fromServer", populatedMessage);
     await roomModel.findByIdAndUpdate(roomId, {
-      lastMessage: populatedMessage._id,
+      lastMessage: populatedMessage.content,
     });
   });
 

@@ -24,7 +24,7 @@ import { User } from "./models/userModel";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 9000;
+const port = 9000;
 
 app.use(express.json());
 
